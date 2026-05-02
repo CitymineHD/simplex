@@ -42,6 +42,7 @@ class simplex():
                 self.c = np.zeros(int(data[1]))
                 self.const_type = []
                 self.optimity = None
+                self.optimity_original = None
 
                 const = int(data[0])
                 n_var = int(data[1])
@@ -99,13 +100,14 @@ class simplex():
         """
         data = data.split()
         self.optimity = data[0]
+        self.optimity_original = data[0]
         if self.optimity == "max":
             self.c = np.array([float(d) for d in data[1:]])
         elif self.optimity == "min":
             self.c = np.array([(-1) * float(d) for d in data[1:]]) #Multiply by -1 to convert the minimization problem to a maximization problem for the simplex algorithm
             self.optimity = "max" #Update the optimity to max for the simplex algorithm
         else:
-            raise Exception("Invalid mode! Mode should be either 'max' or 'min'.")
+            raise Exception("Invalid mode! Mode should be either 'max' or  d'min'.")
 
     def __init_simplex_elements(self):
         """
@@ -154,8 +156,8 @@ class simplex():
         current_val = 0
         for i in range(1, self.simplex_objective.shape[0]):
             if self.simplex_objective[i] > 0 and self.simplex_objective[i] > current_val:
-                    current_val = self.simplex_objective[i]
-                    pivot = i - 1
+                current_val = self.simplex_objective[i]
+                pivot = i - 1
             
         if pivot is not None:
             return pivot
